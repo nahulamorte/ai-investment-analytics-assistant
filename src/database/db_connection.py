@@ -6,7 +6,7 @@ import os
 
 _conexion_pool = None
 
-def inicializar_conexion():
+def inicializar_pool():
     global _conexion_pool
 
     if _conexion_pool is None:
@@ -35,7 +35,7 @@ def obtener_conexion():
     if _conexion_pool is None:
         raise RuntimeError("El pool de conexiones no ha sido inicializado.")
 
-    conexion_fisica = _conexion_pool.getConn()
+    conexion_fisica = _conexion_pool.getconn()
 
     try:
         yield conexion_fisica
