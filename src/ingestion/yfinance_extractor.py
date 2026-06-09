@@ -15,14 +15,16 @@ def extract(ticker: str, periodo: str):
 
 
 def transform(dataFrame: pd.DataFrame) -> pd.DataFrame:
-    #Liberar la fecha del indice
-    df = dataFrame.reset_index(level=None, drop=False, inplace=False, col_level=0, col_fill="")
+    df = dataFrame.reset_index()
 
-    df = df[['index', 'Adj Close']]
+    columna_fecha = 'Date' if 'Date' in df.columns else 'index'
+
+    columna_precio = 'Close' if 'Close' in df.columns else 'Adj Close'
+
+    df = df[[columna_fecha, columna_precio]]
 
     df.columns = ['fecha', 'precio_cierre']
 
-    # Tratamiento de nulos financiero: arrastrar el último precio disponible
     df = df.ffill()
 
     return df

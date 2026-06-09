@@ -4,6 +4,7 @@ from contextlib import contextmanager
 import os
 
 
+
 _conexion_pool = None
 
 def inicializar_pool():
@@ -12,13 +13,13 @@ def inicializar_pool():
     if _conexion_pool is None:
         try:
             _conexion_pool = pool.ThreadedConnectionPool(
-                minconn= 2,
-                maxconn= 10,
-                user = os.environ['DB_USER'],
-                password = os.environ['DB_PASSWORD'],
-                host = os.environ['DB_HOST'],
-                port = os.environ['DB_PORT'],
-                database = os.environ['DB_NAME']
+                minconn=2,
+                maxconn=10,
+                user=os.environ.get('DB_USER', 'postgres'),
+                password=os.environ.get('DB_PASSWORD', 'WarrenMinds2026'),
+                host=os.environ.get('DB_HOST', 'localhost'),
+                port=os.environ.get('DB_PORT', '5432'),
+                database=os.environ.get('DB_NAME', 'buffettminds_db')
             )
 
         except psycopg2.OperationalError as err_infra:
