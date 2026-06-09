@@ -33,12 +33,17 @@ def obtener_conexion():
     global _conexion_pool
 
     if _conexion_pool is None:
-        raise RuntimeError("El pool de conexiones no ha sido inicializado.")
+        inicializar_pool()
 
     conexion_fisica = _conexion_pool.getconn()
 
     try:
         yield conexion_fisica
+        conexion_fisica.commit()
+    except Exception as e:
+        print(f"Error durante la operación con la base de datos: {e}")
+        conexion_fisica.rollback()
+        raise e
     finally:
         _conexion_pool.putconn(conexion_fisica)
 

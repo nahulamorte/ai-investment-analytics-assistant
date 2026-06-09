@@ -1,7 +1,7 @@
 import yfinance as yf
 import pandas as pd
 import numpy as np
-
+from typing import List, Tuple
 
 def extract(ticker: str, periodo: str):
     try:
@@ -28,5 +28,19 @@ def transform(dataFrame: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def obtener_historico_limpio(ticker: str, periodo: str, id_activo: int) -> List[Tuple]:
+    df_crudo = extract(ticker, periodo)
+
+    df_limpio= transform(df_crudo)
 
 
+    lista_tuplas_final = []
+
+    for _, fila in df_limpio.iterrows():
+        fecha = fila['fecha'].date()
+        precio = float(fila['precio_cierre'])
+
+        tupla = (precio, fecha, id_activo)
+        lista_tuplas_final.append(tupla)
+
+        return lista_tuplas_final
